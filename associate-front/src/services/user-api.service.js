@@ -4,8 +4,20 @@ const USERAPI_URL = "/v1/";
 //const USERAPI_URL = "http://127.0.0.1:8080/v1/";
 const sessionid = "sessionid"
 axios.defaults.withCredentials = true
-axios.defaults.baseURL = 'http://localhost:8080';
+axios.defaults.baseURL = '';
 //axios.defaults.proxy.port = "8080"
+axios.interceptors.response.use(function (response) {
+  // Do something with response data
+  return response;
+}, function (error) {
+  // Do something with response error
+  console.log(error)
+  if (error.response.status === 403) {
+    localStorage.removeItem("user");
+    localStorage.removeItem("sessionid")
+  }
+  return Promise.reject(error);
+});
 
 class UserApiService {
   buildHeader() {
