@@ -4,7 +4,7 @@ module.exports = function(app) {
   app.use(
     '/v1/',
     createProxyMiddleware({
-      target: 'http://localhost:7000',
+      target: 'https://glowing-succotash-w5vvxwvxrgpfg7x-7000.app.github.dev',
       changeOrigin: true,
     })
   );

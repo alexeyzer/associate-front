@@ -20,6 +20,17 @@ axios.interceptors.response.use(function (response) {
 });
 
 class UserApiService {
+  СreateExperimentAnswer(req) {
+    this.buildHeader();
+    return axios
+      .post(USERAPI_URL +"experiment-result", req)
+      .then((response) => {
+        if (response.data) {
+          console.log(response.data);
+        }
+        return response.data;
+      });
+  }
   buildHeader() {
     let session = localStorage.getItem(sessionid);
     console.log("session:", session)
