@@ -43,7 +43,7 @@ class ExperimentRun extends Component {
 	handleSubmit(e){
 		e.preventDefault();
 		console.log("submiting answer", this.state.res);;
-		var nnn = {stimusWordId:this.state.stimuses[this.state.experimentStart]?.id, assotiationWord:this.state.answer}
+		var nnn = {stimusWordId:this.state.stimuses[this.state.experimentStart]?.id, assotiationWord:this.state.answer, timeSpend: 0}
 		this.setState({res:[
 			...this.state.res,
 			nnn,
@@ -53,7 +53,21 @@ class ExperimentRun extends Component {
 		this.handleUpdate();
 		console.log(this.state.experimentStart + 1, this.state.stimuses.length -1)
 		if (this.state.experimentStart + 1 > this.state.stimuses.length -1) {
+			const answers = this.state.res
+			answers.push(nnn)
+			console.log(this.state.res)
 			console.log("finisj")
+			const req = {experimentId: this.state.id, userId: 0, answers: answers}
+			UserAPIservice.СreateExperimentAnswer(req).then(
+				(result)=>{
+
+				},
+				(err)=>{
+
+				}
+			)
+
+
 			//api call to sent data
 			this.setState({end:true})
 			localStorage.removeItem('experimentStart')
@@ -81,6 +95,7 @@ class ExperimentRun extends Component {
 	};
     componentDidMount(){
         const {id} = this.props.params;
+		this.setState({id:id})
 		UserAPIservice.GetExperiment(id).then(
 			(res)=>{
 				this.setState({

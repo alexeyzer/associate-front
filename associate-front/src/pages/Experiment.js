@@ -3,24 +3,11 @@ import {Form, Button, Container,Row,Col, Image } from 'react-bootstrap';
 import { connect } from 'react-redux'
 import { Graph } from "react-d3-graph";
 import { useParams, useSearchParams  } from 'react-router-dom';
+import UserAPIservice from "../services/user-api.service";
 
 import ReactDOM from 'react-dom';
+import { getLinkUtilityClass } from '@mui/material';
 
-const options = {
-    layout: {
-      hierarchical: true
-    },
-    edges: {
-      color: "#000000"
-    },
-    height: "500px"
-  };
-
-const events = {
-    select: function(event) {
-      var { nodes, edges } = event;
-    }
-};
 
 const onClickNode = function(nodeId) {
 	window.alert(`Clicked node ${nodeId}`);
@@ -52,21 +39,47 @@ class Experiment extends Component {
 	constructor(props) {
 	  super(props);
 	  this.state = {
-		id:""
+		id:"",
+		link:[],
+		nodes:[],
 	  };
 	  
 	  this.handleChangeSearch = this.handleChangeSearch.bind(this);
+	  this.buildNode = this.buildNode.bind(this);
+	  this.buildLink = this.buildLink.bind(this);
 	}
 	handleChangeSearch(e) {
 		console.log(e.target.value)
 	}
+	buildNode(node) {
+		return {id: node}
+	}
+	buildLink(link) {
+		return {source: link.stimusWord, target: link.assotiationWord, label: link.amount}
+	}
     componentDidMount(){
         const {id} = this.props.params;
-
+		UserAPIservice.GetExperiment(id).then(
+			(res)=>{
+				const nodes = res.nodes.map(this.buildNode)
+				const links = res.experimentGrahp.map(this.buildLink)
+				this.setState({
+					link:links,
+					nodes:nodes,
+				})
+			},
+			(err)=>{
+				console.log(err)
+			}
+		)
         //get experiment by id
     }
 	render() {
 		const { isLoggedIn, message } = this.props;
+		const data = {
+			nodes: this.state.nodes,
+			links: this.state.link,
+		  };
       
 		return (
 			<>

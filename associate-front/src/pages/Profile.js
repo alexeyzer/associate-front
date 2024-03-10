@@ -39,7 +39,7 @@ class Profile extends Component{
 	<Row>
 	<Sidebar/>
 	<Col>
-		afafaef
+		Здраствуйте! {user?.name}
 	</Col>
 	</Row>
 	</Container>}
