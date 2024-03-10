@@ -1,6 +1,6 @@
 import axios from "axios";
-//const USERAPI_URL = "http://62.84.114.46:8080/v1/";
-const USERAPI_URL = "/v1/";
+const USERAPI_URL = "https://ubiquitous-space-cod-5rvv5wv5gwwf46qx-7000.app.github.dev/v1/";
+//const USERAPI_URL = "/v1/";
 //const USERAPI_URL = "http://127.0.0.1:8080/v1/";
 const sessionid = "sessionid"
 axios.defaults.withCredentials = true
@@ -30,10 +30,10 @@ class UserApiService {
       axios.defaults.headers.common[sessionid] = session;
     }
   }
-  ListExperiment(number,limit) {
+  ListExperiment(number,limit, name) {
     this.buildHeader();
     return axios //класс с методами:
-    .get(USERAPI_URL + "experiment/list", {params:{number,limit}})
+    .get(USERAPI_URL + "experiment/list", {params:{"page.number":number,"page.limit":limit, "name":name}})
     .then((response)=>{
       return response.data;
     });

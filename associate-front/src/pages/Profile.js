@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom';
 import {useParams, useSearchParams} from "react-router-dom";
 import { connect } from 'react-redux'
 import Sidebar from '../components/Sidebar'
-import { Card } from 'antd'; 
+
 
 
 function withParams(Component) {

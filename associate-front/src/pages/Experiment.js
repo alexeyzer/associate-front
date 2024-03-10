@@ -29,15 +29,6 @@ const onClickNode = function(nodeId) {
   const onClickLink = function(source, target) {
 	window.alert(`Clicked link between ${source} and ${target}`);
   };
-
-const data = {
-	nodes: [{ id: "Harry"}, { id: "Sally" }, { id: "Alice" }],
-	links: [
-	  { source: "Harry", target: "Sally",label:"h-s"},
-	  { source: "Sally", target: "Harry", label:"s-h" },
-	  { source: "Harry", target: "Alice", label:"h-a"},
-	],
-  };
   
   // the graph configuration, just override the ones you need
   const myConfig = {

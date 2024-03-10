@@ -8,13 +8,18 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
+import logo from '../images/itemListIcon.png';
 
 function buildListItem(id, headerText, bodyText, avatarLink) {
   var link = '/experiments/run/'+id
-
+  var linkResults = '/experiment/'+id
+  console.log(avatarLink)
+  if (!avatarLink) {
+    avatarLink = logo
+  }
   return (
     <>
-    <ListItem alignItems="flex-start">
+    <ListItem sx={{ width: '100%'}} alignItems="flex-start">
         <ListItemAvatar>
           <Avatar alt="Remy Sharp" src={avatarLink} />
         </ListItemAvatar>
@@ -26,7 +31,8 @@ function buildListItem(id, headerText, bodyText, avatarLink) {
             </React.Fragment>
           }
         />
-        <Button href={link} style={{backgroundColor:"black", }} variant="contained">Участвовать</Button>
+        <Button href={linkResults} style={{backgroundColor:"black", }} variant="contained">Результаты</Button>
+        <Button href={link} style={{marginLeft:"10px", backgroundColor:"black", }} variant="contained">Участвовать</Button>
       </ListItem>
       <Divider variant="inset" component="li" />
       </>
@@ -36,7 +42,7 @@ function buildListItem(id, headerText, bodyText, avatarLink) {
 export default function AlignItemsList({experiments}) {
 
   return (
-    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+    <List sx={{ width: '100%' , bgcolor: 'background.paper' }}>
       {experiments.map((el, i) => buildListItem(el.id, el.name,el.description,el.link))}
     </List>
   );

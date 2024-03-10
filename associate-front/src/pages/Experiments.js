@@ -80,13 +80,21 @@ class Experiments extends Component {
 	  this.handleChangePagination = this.handleChangePagination.bind(this);
 	}
 	handleChangeSearch(e) {
-		console.log(e.target.value)
+		UserAPIservice.ListExperiment(this.state.number, this.state.limit, e.target.value).then(
+			(resp)=>{
+				this.setState({experiments:resp.experiments })
+			},
+			(error)=>{
+				console.log(error)
+			}
+		)
+		this.forceUpdate()
 	}
 	handleChangePagination(event, value) {
 		console.log(event)
 		console.log(value)
 		this.setState({number:value})
-		UserAPIservice.ListExperiment(value, this.state.limit).then(
+		UserAPIservice.ListExperiment(value, this.state.limit, "").then(
 			(resp)=>{
 				this.setState({experiments:resp.experiments })
 			},
@@ -97,7 +105,7 @@ class Experiments extends Component {
 		this.forceUpdate()
 	}
 	componentDidMount(){
-		UserAPIservice.ListExperiment(this.state.number, this.state.limit).then(
+		UserAPIservice.ListExperiment(this.state.number, this.state.limit, "").then(
 			(resp)=>{
 				this.setState({experiments:resp.experiments })
 			},
