@@ -11,7 +11,18 @@ import styled from 'styled-components';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled as styledm, alpha } from '@mui/material/styles';
-
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
+import SendIcon from '@mui/icons-material/Send';
+import logo from '../images/itemListIcon.png';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
+import FolderIcon from '@mui/icons-material/Folder';
 
 const Search = styledm('div')(({ theme }) => ({
 	position: 'relative',
@@ -69,7 +80,7 @@ element.style{
   // the graph configuration, just override the ones you need
   const myConfig = {
 	height: 700,
-	width:1250,
+	width:1000,
 	directed: true,
 	nodeHighlightBehavior: true,
 	node: {
@@ -102,7 +113,48 @@ class Experiment extends Component {
 	  this.onClickNode = this.onClickNode.bind(this);
 	  this.buildNode = this.buildNode.bind(this);
 	  this.buildLink = this.buildLink.bind(this);
+	  this.alignFilterItemsList = this.alignFilterItemsList.bind(this);
+	  this.buildListItem = this.buildListItem.bind(this);
+	  this.deleteFilter = this.deleteFilter.bind(this);
 	}
+	deleteFilter(event, filter) {
+		console.log(filter);
+		let filternew = this.state.filter.filter(item => item !== filter)
+		this.setState({
+			filter:filternew
+		});
+		window.alert(`Фильтр удален`);
+		this.componentDidMount();
+		this.forceUpdate();
+	}
+	buildListItem(filter) {
+		return (
+		  <>
+		   <ListItem
+                  secondaryAction={
+                    <IconButton onClick={(e) => {
+						this.deleteFilter(e, filter);
+					 }} edge="end" aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  }
+                >
+                  <ListItemAvatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={filter}
+                  />
+                </ListItem>
+			</>
+		);
+	  }
+	  alignFilterItemsList(filters) {
+		return (
+		  <List sx={{ width: '100%' , bgcolor: 'background.paper' }}>
+			{filters.map((el, i) => this.buildListItem(el))}
+		  </List>
+		);
+	  }
 	onClickNode = function(nodeId) {
 		console.log(nodeId)
 		this.setState({filter:[
@@ -131,6 +183,7 @@ class Experiment extends Component {
 		return {source: link.stimusWord, target: link.assotiationWord, label: link.amount}
 	}
     componentDidMount(){
+		console.log(this.state.filter)
         const {id} = this.props.params;
 		UserAPIservice.GetExperiment(id, 1, 1000, this.state.filter).then(
 			(res)=>{
@@ -172,7 +225,8 @@ class Experiment extends Component {
           			</Search>
 				 </Col>
 				</Row>
-			 	<Row style={{border:"1px solid black", borderRadius: "15px"}}>
+			 	<Row>
+				 <Col style={{width:1100, border:"1px solid black", borderRadius: "15px"}}>
 				 <Graph
 				id="graph-id" // id is mandatory
 				data={data}
@@ -180,6 +234,10 @@ class Experiment extends Component {
 				onClickNode={this.onClickNode}
 				onClickLink={onClickLink}
 				/>
+				</Col>
+				<Col style={{width:296, border:"1px solid black", borderRadius: "15px"}}>
+				{this.alignFilterItemsList(this.state.filter)}
+				</Col>
 				</Row>
 			 </Container>
 			 </Styles>
