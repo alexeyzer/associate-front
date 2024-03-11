@@ -12,7 +12,7 @@ import logo from '../images/itemListIcon.png';
 
 function buildListItem(id, headerText, bodyText, avatarLink) {
   var link = '/experiments/run/'+id
-  var linkResults = '/experiment/'+id
+  var linkResults = '/experiments/'+id
   console.log(avatarLink)
   if (!avatarLink) {
     avatarLink = logo

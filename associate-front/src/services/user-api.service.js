@@ -49,10 +49,10 @@ class UserApiService {
       return response.data;
     });
   }
-  GetExperiment(id) {
+  GetExperiment(id, number, limit, filter) {
     this.buildHeader();
     return axios //класс с методами:
-    .get(USERAPI_URL + "experiment", {params:{id}})
+    .get(USERAPI_URL + "experiment", {params:{"experimentResultsPagination.number":number,"experimentResultsPagination.limit":limit, "id": id, names:filter}})
     .then((response)=>{
       return response.data;
     });
