@@ -96,7 +96,7 @@ class Experiments extends Component {
 		this.setState({number:value})
 		UserAPIservice.ListExperiment(value, this.state.limit, "").then(
 			(resp)=>{
-				this.setState({experiments:resp.experiments })
+				this.setState({experiments:resp.experiments})
 			},
 			(error)=>{
 				console.log(error)
@@ -107,7 +107,7 @@ class Experiments extends Component {
 	componentDidMount(){
 		UserAPIservice.ListExperiment(this.state.number, this.state.limit, "").then(
 			(resp)=>{
-				this.setState({experiments:resp.experiments })
+				this.setState({experiments:resp.experiments})
 			},
 			(error)=>{
 				console.log(error)

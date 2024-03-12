@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form, Button, Container,Row,Col, Image } from 'react-bootstrap';
+import {Form, Container,Row,Col, Image } from 'react-bootstrap';
 import { connect } from 'react-redux'
 import { Graph } from "react-d3-graph";
 import { useParams, useSearchParams  } from 'react-router-dom';
@@ -23,6 +23,7 @@ import logo from '../images/itemListIcon.png';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import FolderIcon from '@mui/icons-material/Folder';
+import Button from '@mui/material/Button';
 
 const Search = styledm('div')(({ theme }) => ({
 	position: 'relative',
@@ -175,9 +176,16 @@ class Experiment extends Component {
 			this.state.search,
 		]});
 		this.setState({search:""})
+		this.componentDidMount();
+		this.forceUpdate();
 	}
 	buildNode(node) {
-		return {id: node}
+		let color = "" 
+		if(this.state.filter.includes(node)) {
+			color = "red"
+		}
+
+		return {id: node, color: color}
 	}
 	buildLink(link) {
 		return {source: link.stimusWord, target: link.assotiationWord, label: link.amount}
@@ -211,19 +219,31 @@ class Experiment extends Component {
 			<Styles>
 			 <Container>
 			 <Row >
+			 <br/>
+			 <br/>
 				 <Col>
+				 <br/>
 				 	<Search>
 					<SearchIconWrapper onClick={this.handleSubmit}>
 					<SearchIcon />
 					</SearchIconWrapper>
 					<StyledInputBase
 					placeholder="Поиск..."
+					value={this.state.search}
 					inputProps={{ 'aria-label': 'search' }}
 					onChange={this.handleChangeSearch}
 					onSubmit={this.handleSubmitSearch}
 					/>
           			</Search>
+					  <br/>
 				 </Col>
+				 <Col>
+				 <br/>
+					<Button onClick={this.handleSubmitSearch} style={{backgroundColor:"black", textColor:"white"}} variant="contained">Поиск</Button>
+				<br/>
+				</Col>
+				<br/>
+				<br/>
 				</Row>
 			 	<Row>
 				 <Col style={{width:1100, border:"1px solid black", borderRadius: "15px"}}>
