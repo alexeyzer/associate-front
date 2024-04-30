@@ -7,6 +7,7 @@ import {Link} from 'react-router-dom';
 import {useParams, useSearchParams} from "react-router-dom";
 import { connect } from 'react-redux'
 import Sidebar from '../components/Sidebar'
+import Experiments from './Experiments'
 
 
 
@@ -18,10 +19,10 @@ class Profile extends Component{
 	constructor(props){
         super(props);
             this.state = {
+				experiments: []
             };
 		this.querryCreate = this.querryCreate.bind(this);     
     }
-
 	querryCreate(param){
 		const [searchParams, setSearchParams] = this.props.url;
 		setSearchParams({ linkParam: param });
@@ -30,7 +31,7 @@ class Profile extends Component{
 		const { isLoggedIn, user } = this.props;
 		const [searchParams, setSearchParams] = this.props.url;
 		 let param = searchParams.get("linkParam")
-		console.log(param)
+		console.log(param, param === "experiments")
 	return (
 	<>
 	{!isLoggedIn && <Navigate replace to="/login" />}
@@ -38,9 +39,13 @@ class Profile extends Component{
 	<br/>
 	<Row>
 	<Sidebar/>
-	<Col>
+	{param === "" &&<Col>
 		Здраствуйте! {user?.name}
-	</Col>
+	</Col>}
+	{param === "experiments" && <Col xs={12} md={8}>
+	<Experiments userExperiments={true}></Experiments>
+	
+	</Col>}
 	</Row>
 	</Container>}
 	

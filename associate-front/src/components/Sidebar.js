@@ -31,7 +31,7 @@ export default function SideBar() {
     const { collapseSidebar } = useProSidebar();
 
 	return (
-    <Col>
+    <Col xs={6} md={4}>
       <Styles>
       <Sidebar>
         <Menu>

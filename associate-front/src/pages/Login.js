@@ -13,6 +13,7 @@ class Login extends Component {
 		email: "",
 		password: "",
 		loading: false,
+		register:false,
 	  };
 	  
 	  this.handleLogin = this.handleLogin.bind(this);
@@ -51,10 +52,15 @@ class Login extends Component {
 	}
 	render() {
 		const { isLoggedIn, message } = this.props;
+
+		const siginHandler = () => {
+			
+		}
 		
 		return (
 			<>
 			{isLoggedIn && <Navigate replace to="/profile" />}
+			{this.state.register && <Navigate replace to="/register" />}
 			<Container style={{width: "70vh"}} className="mt-3" >
 				{message && (
               <Form.Group>
@@ -75,7 +81,10 @@ class Login extends Component {
 				<Form.Label>Пароль</Form.Label>
 				<Form.Control type="password" placeholder="Password" value={this.state.password} onChange={this.onChangePassword}/>
 			</Form.Group>
-			<Button onClick={this.handleLogin} style={{backgroundColor:"black", }} variant="contained">Войти/Зарегестрироваться</Button>
+			<Button onClick={this.handleLogin} style={{backgroundColor:"black"}} variant="contained">Войти</Button>
+			<Button onClick={()=>{
+				this.setState({register:true})
+			}} style={{backgroundColor:"black", }} variant="contained">Регистрация</Button>
 		</Form>
 	</Container>
 	</>
@@ -87,9 +96,10 @@ class Login extends Component {
 function mapStateToProps(state) {
 	const {isLoggedIn}  = state.userAPIreducer;
 	const {message}  = state.message;
+	
 	return {
 	  isLoggedIn,
-	  message
+	  message,
 	};
   }
 

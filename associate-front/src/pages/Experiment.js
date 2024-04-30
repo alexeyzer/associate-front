@@ -78,8 +78,11 @@ element.style{
 	window.alert(`Clicked link between ${source} and ${target}`);
   };
   
-  // the graph configuration, just override the ones you need
+  // the graph configuration, jcdust override the ones you need
   const myConfig = {
+	staticGraphWithDragAndDrop: false,
+	panAndZoom: false,
+	focusAnimationDuration: 0,
 	height: 700,
 	width:1000,
 	directed: true,
@@ -123,10 +126,11 @@ class Experiment extends Component {
 		let filternew = this.state.filter.filter(item => item !== filter)
 		this.setState({
 			filter:filternew
+		}, ()=>{
+			window.alert(`Фильтр удален`);
+			this.componentDidMount();
+			this.forceUpdate();
 		});
-		window.alert(`Фильтр удален`);
-		this.componentDidMount();
-		this.forceUpdate();
 	}
 	buildListItem(filter) {
 		return (
@@ -161,10 +165,10 @@ class Experiment extends Component {
 		this.setState({filter:[
 			...this.state.filter,
 			nodeId,
-		]});
-		window.alert(`Clicked node ${nodeId}`);
-		this.componentDidMount();
-		this.forceUpdate();
+		]},()=>{
+			this.componentDidMount();
+			this.forceUpdate();
+		});
 	  };
 	handleChangeSearch(e) {
 		this.setState({search:e.target.value});
@@ -175,25 +179,26 @@ class Experiment extends Component {
 			...this.state.filter,
 			this.state.search,
 		]});
-		this.setState({search:""})
-		this.componentDidMount();
-		this.forceUpdate();
+		this.setState({search:""}, ()=>{
+			this.componentDidMount();
+			this.forceUpdate();
+		})
 	}
 	buildNode(node) {
 		let color = "" 
-		if(this.state.filter.includes(node)) {
+		if(this.state.filter.includes(node.name)) {
 			color = "red"
 		}
 
-		return {id: node, color: color}
+		return {id: node.name, color: color, x: node.x, y:Node.y}
 	}
 	buildLink(link) {
 		return {source: link.stimusWord, target: link.assotiationWord, label: link.amount}
 	}
     componentDidMount(){
-		console.log(this.state.filter)
+		console.log("filter", this.state.filter)
         const {id} = this.props.params;
-		UserAPIservice.GetExperiment(id, 1, 1000, this.state.filter).then(
+		UserAPIservice.GetExperimentCalculated(id, 1, 700, this.state.filter).then(
 			(res)=>{
 				const nodes = res.nodes.map(this.buildNode)
 				const links = res.experimentGrahp.map(this.buildLink)

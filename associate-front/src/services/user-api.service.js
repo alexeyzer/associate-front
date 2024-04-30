@@ -41,15 +41,25 @@ class UserApiService {
       axios.defaults.headers.common[sessionid] = session;
     }
   }
-  ListExperiment(number,limit, name) {
+  ListExperiment(number,limit, name, userExperiments) {
     this.buildHeader();
     return axios //класс с методами:
-    .get(USERAPI_URL + "experiment/list", {params:{"page.number":number,"page.limit":limit, "name":name}})
+    .get(USERAPI_URL + "experiment/list", {params:{"page.number":number,"page.limit":limit, "name":name, "userExperiments":userExperiments}})
+    .then((response)=>{
+      return response.data;
+    });
+  }
+  GetExperimentCalculated(id, number, limit, filter) {
+    console.log("filter in req", filter)
+    this.buildHeader();
+    return axios //класс с методами:
+    .get(USERAPI_URL + "experimentCalculated/list", {params:{"experimentResultsPagination.number":number,"experimentResultsPagination.limit":limit, "id": id, names:filter}})
     .then((response)=>{
       return response.data;
     });
   }
   GetExperiment(id, number, limit, filter) {
+    console.log("filter in req", filter)
     this.buildHeader();
     return axios //класс с методами:
     .get(USERAPI_URL + "experiment", {params:{"experimentResultsPagination.number":number,"experimentResultsPagination.limit":limit, "id": id, names:filter}})

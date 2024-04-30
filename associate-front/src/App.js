@@ -15,6 +15,7 @@ import Bar from './components/Bar'
 import Sidebar from './components/Sidebar'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
+import Register from './pages/register';
 
 function App() {
   return (
@@ -25,8 +26,9 @@ function App() {
         <Routes>
           <Route path="/profile" element={<Profile/>}></Route>
           <Route path="/login" element={<Login/>}></Route>
+          <Route path="/register" element={<Register/>}></Route>
           <Route path="/" element={<Main/>}></Route>
-          <Route path="/experiments" element={<Experiments/>}></Route>
+          <Route path="/experiments" element={<Experiments userExperiments={false}/>}></Route>
           <Route path="/experiments/:id" element={<Experiment/>}></Route>
           <Route path="/experiments/run/:id" element={<ExperimentRun/>}></Route>
         </Routes>

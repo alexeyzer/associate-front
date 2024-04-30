@@ -105,7 +105,7 @@ class Experiments extends Component {
 		this.forceUpdate()
 	}
 	componentDidMount(){
-		UserAPIservice.ListExperiment(this.state.number, this.state.limit, "").then(
+		UserAPIservice.ListExperiment(this.state.number, this.state.limit, "", this.props.userExperiments).then(
 			(resp)=>{
 				this.setState({experiments:resp.experiments})
 			},

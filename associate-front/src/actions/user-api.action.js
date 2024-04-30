@@ -3,8 +3,38 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   SET_MESSAGE,
+  REGISTER_SUCCESS,
+  REGISTER_FAIL,
 } from "../actions/types";
 import UserAPIservice from "../services/user-api.service";
+
+export const register = (email, name, password, patronymic, phone, surname) => (dispatch) => {
+  return UserAPIservice.register(email, name, password, patronymic, phone, surname).then(
+    (response) => {
+      dispatch({
+        type: REGISTER_SUCCESS,
+        payload: { user: response},
+      });
+      return Promise.resolve();
+    },
+    (error) => {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      Promise.reject();
+      dispatch({
+        type: REGISTER_FAIL,
+      });
+      dispatch({
+        type: SET_MESSAGE,
+        payload: message,
+      });
+    }
+  ).catch();
+};
 
 export const login = (email, password) => (dispatch) => {
   return UserAPIservice.login(email, password).then(
