@@ -8,6 +8,7 @@ import Container from 'react-bootstrap/Container';
 
 import Main from './pages/Main'
 import ExperimentRun from './pages/ExperimentRun'
+import AssociationInput from './pages/ExperimentRunV2'
 import Experiment from './pages/Experiment'
 import Experiments from './pages/Experiments'
 import Navibar from './components/Navibar'
@@ -30,7 +31,7 @@ function App() {
           <Route path="/" element={<Main/>}></Route>
           <Route path="/experiments" element={<Experiments userExperiments={false}/>}></Route>
           <Route path="/experiments/:id" element={<Experiment/>}></Route>
-          <Route path="/experiments/run/:id" element={<ExperimentRun/>}></Route>
+          <Route path="/experiments/run/:id" element={<AssociationInput/>}></Route>
         </Routes>
       </Container>
     </Router>

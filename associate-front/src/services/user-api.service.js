@@ -58,6 +58,15 @@ class UserApiService {
       return response.data;
     });
   }
+  FindPaths(id, word1, word2) {
+    console.log("filter in req", id, word1,word2)
+    this.buildHeader();
+    return axios //класс с методами:
+    .get(USERAPI_URL + "experimentCalculated/findPaths", {params:{"id": id, word1:word1,word2:word2}})
+    .then((response)=>{
+      return response.data;
+    });
+  }
   GetExperiment(id, number, limit, filter) {
     console.log("filter in req", filter)
     this.buildHeader();

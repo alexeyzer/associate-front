@@ -24,6 +24,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import FolderIcon from '@mui/icons-material/Folder';
 import Button from '@mui/material/Button';
+import ChainList from '../components/ChainList';
+import ChainsMap from '../components/ChainsMap';
+import ExperimentSideBar from '../components/ExperimentSidebar';
+import ExperimentDetails from '../components/ExperimentDetails';
+import SearchPaths from '../components/SearchPaths';
 
 const Search = styledm('div')(({ theme }) => ({
 	position: 'relative',
@@ -69,7 +74,7 @@ const Search = styledm('div')(({ theme }) => ({
 
 const Styles = styled.div`
 element.style{
-	witdh: 1000px;
+	witdh: 600px;
     height:500px;
 }
 `
@@ -83,8 +88,8 @@ element.style{
 	staticGraphWithDragAndDrop: false,
 	panAndZoom: false,
 	focusAnimationDuration: 0,
-	height: 700,
-	width:1000,
+	height: 800,
+	width:838,
 	directed: true,
 	nodeHighlightBehavior: true,
 	node: {
@@ -110,6 +115,9 @@ class Experiment extends Component {
 		nodes:[],
 		filter:[],
 		search:"",
+		longestChains:[],
+		findWord: {},
+		experimentData: null,
 	  };
 	  
 	  this.handleChangeSearch = this.handleChangeSearch.bind(this);
@@ -135,7 +143,7 @@ class Experiment extends Component {
 	buildListItem(filter) {
 		return (
 		  <>
-		   <ListItem
+		   <ListItem style={{border:"1px solid black", borderRadius: "15px"}}
                   secondaryAction={
                     <IconButton onClick={(e) => {
 						this.deleteFilter(e, filter);
@@ -150,12 +158,13 @@ class Experiment extends Component {
                     primary={filter}
                   />
                 </ListItem>
+				<br></br>
 			</>
 		);
 	  }
 	  alignFilterItemsList(filters) {
 		return (
-		  <List sx={{ width: '100%' , bgcolor: 'background.paper' }}>
+		  <List sx={{bgcolor: 'background.paper' }}>
 			{filters.map((el, i) => this.buildListItem(el))}
 		  </List>
 		);
@@ -205,6 +214,18 @@ class Experiment extends Component {
 				this.setState({
 					link:links,
 					nodes:nodes,
+					longestChains:res.longestChains,
+					findWord: res.findWords,
+				})
+			},
+			(err)=>{
+				console.log(err)
+			}
+		)
+		UserAPIservice.GetExperiment(id, 1, []).then(
+			(res)=>{
+				this.setState({
+					experimentData:res,
 				})
 			},
 			(err)=>{
@@ -213,7 +234,12 @@ class Experiment extends Component {
 		)
     }
 	render() {
+
+		const [searchParams, setSearchParams] = this.props.url;
+		let param = searchParams.get("linkParam")
+		console.log(param)
 		const { isLoggedIn, message } = this.props;
+		const {id} = this.props.params;
 		const data = {
 			nodes: this.state.nodes,
 			links: this.state.link,
@@ -223,9 +249,19 @@ class Experiment extends Component {
 			<>
 			<Styles>
 			 <Container>
-			 <Row >
+
+			<Row>
+
+			<ExperimentSideBar></ExperimentSideBar>
+
+			<Col xs={12} md={8}>
 			 <br/>
 			 <br/>
+
+			 {(param === null || param === "") &&
+			 <>
+			  <Row >
+
 				 <Col>
 				 <br/>
 				 	<Search>
@@ -242,16 +278,19 @@ class Experiment extends Component {
           			</Search>
 					  <br/>
 				 </Col>
+
 				 <Col>
 				 <br/>
 					<Button onClick={this.handleSubmitSearch} style={{backgroundColor:"black", textColor:"white"}} variant="contained">Поиск</Button>
 				<br/>
 				</Col>
+
 				<br/>
 				<br/>
-				</Row>
-			 	<Row>
-				 <Col style={{width:1100, border:"1px solid black", borderRadius: "15px"}}>
+			</Row>
+
+			<Row>
+				 <Col style={{width:600, border:"1px solid black", borderRadius: "15px"}}>
 				 <Graph
 				id="graph-id" // id is mandatory
 				data={data}
@@ -260,10 +299,37 @@ class Experiment extends Component {
 				onClickLink={onClickLink}
 				/>
 				</Col>
-				<Col style={{width:296, border:"1px solid black", borderRadius: "15px"}}>
+			</Row></>}
+
+			{((param === null || param === "") && this.state.filter.length) > 0 &&<>
+			<Row>
+			<h3>Выбранные фильтры:</h3>
 				{this.alignFilterItemsList(this.state.filter)}
-				</Col>
-				</Row>
+			</Row>
+			<Row >
+			<ChainsMap map={this.state.findWord} />
+			</Row></>}
+
+			{param==="long" &&
+			<Row >
+					<ChainList longestChains={this.state.longestChains} />
+			</Row>}
+
+			{param==="information" &&
+			 <ExperimentDetails experiment={this.state.experimentData}></ExperimentDetails>
+
+			}
+
+			{param==="find" &&
+			<SearchPaths experimentId={id}></SearchPaths>
+
+			}
+
+			
+
+			</Col>
+
+			</Row>	
 			 </Container>
 			 </Styles>
 			</>
@@ -281,9 +347,11 @@ function mapStateToProps(state) {
 	};
   }
 
-  function withParams(Component) {
-    return (props) => <Component {...props} params={useParams()} />;
-    }
+function withParams(Component) {
+    return props => <Component {...props} params={useParams()} url = {useSearchParams()} />;
+}
+
+	
     
 
 export default withParams(connect(mapStateToProps)(Experiment));
