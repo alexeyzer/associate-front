@@ -24,7 +24,6 @@ export const register = (email, name, password, patronymic, phone, surname) => (
           error.response.data.message) ||
         error.message ||
         error.toString();
-      Promise.reject();
       dispatch({
         type: REGISTER_FAIL,
       });

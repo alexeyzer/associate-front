@@ -76,16 +76,15 @@ class Register extends Component {
 	  const { dispatch } = this.props;
 
 	  console.log("	ВВЕДЕННЫЕ ДАННЫЕ ", this.state.email, this.state.name,  this.state.password,  this.state.patronymic,  this.state.phone, this.state.surname )
-	  dispatch(register(this.state.email, this.state.name,  this.state.password,  this.state.patronymic,  this.state.phone, this.state.surname)).then(() => {
+	  try {
+		dispatch(register(this.state.email, this.state.name,  this.state.password,  this.state.patronymic,  this.state.phone, this.state.surname));
+	} catch (error) {
+		console.error(error);
+	} finally {
 		this.setState({
-			loading: false,
+			loading: false
 		  });
-        }).
-        Catch(() => {
-			this.setState({
-				loading: false
-			  });
-        })
+	}
 	
 	}
 	render() {

@@ -35,7 +35,8 @@ class Profile extends Component{
 	return (
 	<>
 	{!isLoggedIn && <Navigate replace to="/login" />}
-	{isLoggedIn && <Container>
+	{isLoggedIn && 
+	<Container>
 	<br/>
 	<Row>
 	<Sidebar/>
